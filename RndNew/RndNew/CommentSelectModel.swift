@@ -1,0 +1,68 @@
+//
+//  CommentSelectModel.swift
+//  RndNew
+//
+//  Created by SooHoon on 2021/08/03.
+//
+
+import Foundation
+
+protocol CommentSelectProtocol {
+    func commentDownload(comment: NSArray)
+}
+
+class CommentSelectModel{
+    var delegate: CommentSelectProtocol!
+    var urlPath = "http://192.168.0.10:8080/iosFeed/comment_Select.jsp"
+    
+    func getComment(fNo: Int){
+        let urlAdd = "?fNo=\(fNo)"
+        urlPath = urlPath + urlAdd
+        
+        urlPath = urlPath.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!
+        
+        let url = URL(string: urlPath)!
+        let defaultSession = Foundation.URLSession(configuration: URLSessionConfiguration.default)
+        let task = defaultSession.dataTask(with: url){(data, response, error) in
+            if error != nil{
+                print("Failed to download data")
+            }else{
+                print("Data is inserted!")
+                self.parseJson(data!)
+            }
+        }
+        task.resume()
+    }
+    
+    func parseJson(_ data: Data){
+        var jsonResult = NSArray()
+        
+        do{
+            jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! NSArray
+        }catch let error as NSError{
+            print("test1")
+            print("Error: \(error)")
+        }
+        print("test")
+        var jsonElement = NSDictionary()
+        let locations = NSMutableArray()
+        print("test2")
+        for i in 0..<jsonResult.count{
+            print("test3")
+            jsonElement = jsonResult[i] as! NSDictionary
+            print("test4")
+            if let cNo = jsonElement["cNo"] as? String, // if let쓰기
+               let cWriter = jsonElement["cWriter"] as? String,
+               let cSubmitDate = jsonElement["cSubmitDate"] as? String,
+               let cContent = jsonElement["cContent"] as? String{
+                print ("\(cNo) \n \(cWriter)")
+                let query = DBModel(cNo: cNo, cWriter: cWriter, cContent: cContent, cSubmitDate: cSubmitDate)
+                locations.add(query) // append아님!! 주의 **************************
+            }
+        }
+        DispatchQueue.main.async(execute: {() -> Void in
+            self.delegate.commentDownload(comment: locations)
+        })
+    }
+}
+
