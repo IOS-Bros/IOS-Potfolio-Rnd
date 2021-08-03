@@ -18,6 +18,7 @@ class FeedTableViewController: UITableViewController {
         super.viewDidLoad()
         tbComment.estimatedRowHeight = 200
         tbComment.rowHeight = UITableView.automaticDimension
+        tbComment.separatorStyle = .none
 //        let commentSelectModel = CommentSelectModel()
 //        commentSelectModel.delegate = self
 //        commentSelectModel.getComment(fNo: 1)
@@ -55,7 +56,7 @@ class FeedTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath) as! FeedTableViewCell
-
+        cell.delegate = self
         // Configure the cell...
         let comment: DBModel = commentArray[indexPath.row] as! DBModel
         
@@ -111,6 +112,10 @@ class FeedTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return UITableView.automaticDimension
+    }
 
 } // TableViewController
 
@@ -118,5 +123,21 @@ extension FeedTableViewController: CommentSelectProtocol{
     func commentDownload(comment: NSArray) {
         commentArray = comment
         self.tbComment.reloadData()
+    }
+}
+
+extension FeedTableViewController: FeedTableViewCellDelegate {
+    func updateTextViewHeight(_ cell: FeedTableViewCell, _ textView: UITextView) {
+        
+        let size = textView.bounds.size
+        let newSize = tableView.sizeThatFits(CGSize(width: size.width, height: CGFloat.greatestFiniteMagnitude))
+        print(newSize)
+        
+        if size.height != newSize.height {
+        UIView.setAnimationsEnabled(false)
+            tableView.beginUpdates()
+            tableView.endUpdates()
+            UIView.setAnimationsEnabled(true)
+        }
     }
 }
