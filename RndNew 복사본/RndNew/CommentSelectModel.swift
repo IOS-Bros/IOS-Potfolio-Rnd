@@ -13,7 +13,7 @@ protocol CommentSelectProtocol {
 
 class CommentSelectModel{
     var delegate: CommentSelectProtocol!
-    var urlPath = "http://192.168.0.10:8080/iosFeed/comment_Select.jsp"
+    var urlPath = "http://\(ipAdd):8080/iosFeed/comment_Select.jsp"
     
     func getComment(fNo: Int){
         let urlAdd = "?fNo=\(fNo)"
@@ -40,17 +40,17 @@ class CommentSelectModel{
         do{
             jsonResult = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions.allowFragments) as! NSArray
         }catch let error as NSError{
-            print("test1")
+            
             print("Error: \(error)")
         }
-        print("test")
+        
         var jsonElement = NSDictionary()
         let locations = NSMutableArray()
-        print("test2")
+        
         for i in 0..<jsonResult.count{
-            print("test3")
+            
             jsonElement = jsonResult[i] as! NSDictionary
-            print("test4")
+            
             if let cNo = jsonElement["cNo"] as? String, // if let쓰기
                let cWriter = jsonElement["cWriter"] as? String,
                let cSubmitDate = jsonElement["cSubmitDate"] as? String,
