@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BD7C76F126BA348B00AC4BF5 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD7C76F026BA348B00AC4BF5 /* File.swift */; };
+		BD7C76F326BA3BF600AC4BF5 /* CommentDeleteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD7C76F226BA3BF600AC4BF5 /* CommentDeleteModel.swift */; };
+		BD7C76F726BAB98700AC4BF5 /* CommentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD7C76F626BAB98700AC4BF5 /* CommentViewController.swift */; };
 		BDA4E44226B9468900271D2E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA4E44126B9468900271D2E /* AppDelegate.swift */; };
 		BDA4E44426B9468900271D2E /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDA4E44326B9468900271D2E /* SceneDelegate.swift */; };
 		BDA4E44926B9468900271D2E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDA4E44726B9468900271D2E /* Main.storyboard */; };
@@ -19,6 +22,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		BD7C76F026BA348B00AC4BF5 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		BD7C76F226BA3BF600AC4BF5 /* CommentDeleteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentDeleteModel.swift; sourceTree = "<group>"; };
+		BD7C76F626BAB98700AC4BF5 /* CommentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentViewController.swift; sourceTree = "<group>"; };
 		BDA4E43E26B9468900271D2E /* RndNew.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RndNew.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BDA4E44126B9468900271D2E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		BDA4E44326B9468900271D2E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +78,9 @@
 				BDA4E44F26B9468A00271D2E /* Info.plist */,
 				BDA4E45926B94D5100271D2E /* DBModel.swift */,
 				BDA4E45B26B9579400271D2E /* CommentSelectModel.swift */,
+				BD7C76F026BA348B00AC4BF5 /* File.swift */,
+				BD7C76F226BA3BF600AC4BF5 /* CommentDeleteModel.swift */,
+				BD7C76F626BAB98700AC4BF5 /* CommentViewController.swift */,
 			);
 			path = RndNew;
 			sourceTree = "<group>";
@@ -148,10 +157,13 @@
 			files = (
 				BDA4E45A26B94D5100271D2E /* DBModel.swift in Sources */,
 				BDA4E44226B9468900271D2E /* AppDelegate.swift in Sources */,
+				BD7C76F326BA3BF600AC4BF5 /* CommentDeleteModel.swift in Sources */,
+				BD7C76F126BA348B00AC4BF5 /* File.swift in Sources */,
 				BDA4E45826B947C800271D2E /* FeedTableViewCell.swift in Sources */,
 				BDA4E45626B947BB00271D2E /* FeedTableViewController.swift in Sources */,
 				BDA4E44426B9468900271D2E /* SceneDelegate.swift in Sources */,
 				BDA4E45C26B9579400271D2E /* CommentSelectModel.swift in Sources */,
+				BD7C76F726BAB98700AC4BF5 /* CommentViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

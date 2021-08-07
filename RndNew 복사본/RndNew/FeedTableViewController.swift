@@ -7,9 +7,9 @@
 
 import UIKit
 
-var commentArray: NSArray = NSArray()
+var commentArray: NSMutableArray = NSMutableArray()
 var fNo = 1
-
+var ipAdd = "192.168.2.108"
 class FeedTableViewController: UITableViewController {
 
     @IBOutlet var tbComment: UITableView!
@@ -39,6 +39,7 @@ class FeedTableViewController: UITableViewController {
         let commentSelectModel = CommentSelectModel()
         commentSelectModel.delegate = self
         commentSelectModel.getComment(fNo: fNo)
+        print(commentArray.count)
     }
     
     // MARK: - Table view data source
@@ -76,17 +77,49 @@ class FeedTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        
+        let comment : DBModel = commentArray[indexPath.row] as! DBModel
+        
         if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
+            
+            // 삭제에 사용할 키 값 불러오기
+            let cNo = comment.cNo!
+            print("cNo :", cNo)
+            let deleteModel = DeleteModel()
+            let result = deleteModel.DeleteItems(cNo: cNo)
+            print("---->", result)
+            
+                if result == true{
+                    let resultAlert = UIAlertController(title: "완료", message: "삭제가 완료됐습니다", preferredStyle: .alert)
+                    let onAction = UIAlertAction(title: "OK", style: .default, handler: {ACTION in
+                        commentArray.removeObject(at: indexPath.row)
+                        tableView.deleteRows(at: [indexPath], with: .fade)
+                    })
+                    
+                    resultAlert.addAction(onAction)
+                    present(resultAlert, animated: true, completion: nil)
+                    
+                }else{
+                    let resultAlert = UIAlertController(title: "실패", message: "에러가 발생했습니다", preferredStyle: .alert)
+                    let onAction = UIAlertAction(title: "OK", style: .default, handler: {ACTION in
+                        self.navigationController?.popViewController(animated: true)
+                    })
+                    
+                    resultAlert.addAction(onAction)
+                    present(resultAlert, animated: true, completion: nil)
+                }
+            }else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+    
+    override func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "삭제"
+    }
+    
 
     /*
     // Override to support rearranging the table view.
@@ -121,7 +154,7 @@ class FeedTableViewController: UITableViewController {
 
 extension FeedTableViewController: CommentSelectProtocol{
     func commentDownload(comment: NSArray) {
-        commentArray = comment
+        commentArray = comment as! NSMutableArray
         self.tbComment.reloadData()
     }
 }
