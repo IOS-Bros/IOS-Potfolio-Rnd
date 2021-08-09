@@ -9,15 +9,15 @@ import UIKit
 
 var commentArray: NSMutableArray = NSMutableArray()
 var fNo = 1
-var ipAdd = "172.20.10.10"
+var ipAdd = "192.168.0.11"
 
-class CommentViewController: UIViewController {
+class CommentViewController: UIViewController, UITextViewDelegate {
 
     @IBOutlet weak var tbComment: UITableView!
     @IBOutlet weak var tvAddComment: UITextView!
     @IBOutlet weak var insertView: UIView!
     @IBOutlet weak var stackView: UIStackView!
-    @IBOutlet weak var textViewBC: NSLayoutConstraint!
+
         
         
     var cNo = 0
@@ -25,6 +25,8 @@ class CommentViewController: UIViewController {
     var cWriter = "DDD"
     var cContent = ""
 
+    var fCurTextfieldBottom: CGFloat = 0.0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,7 +37,7 @@ class CommentViewController: UIViewController {
         
 //        tvAddComment.translatesAutoresizingMaskIntoConstraints = true
 //        insertView.sizeToFit()
-
+        tvAddComment.delegate = self
         
         tvAddComment.text = " j"
         
@@ -46,8 +48,43 @@ class CommentViewController: UIViewController {
         tbComment.estimatedRowHeight = 500
         tbComment.separatorStyle = .none
         
-
+        
+        //
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        
     } //ViewDidLoad
+    
+    func textFieldDidBeginEditing(_ textView: UITextView) {
+            fCurTextfieldBottom = textView.frame.origin.y + textView.frame.height
+        }
+
+    @objc func keyboardWillShow(notification: NSNotification) {
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                if fCurTextfieldBottom <= self.view.frame.height - keyboardSize.height {
+                    return
+                }
+                if self.view.frame.origin.y == 0 {
+                    self.view.frame.origin.y -= keyboardSize.height
+                }
+            }
+        }
+    
+    
+    @objc func keyboardWillHide(notification: NSNotification) {
+           if self.view.frame.origin.y != 0 {
+               self.view.frame.origin.y = 0
+           }
+       }
+    
+    func textFieldShouldReturn(_ textView: UITextView) -> Bool {
+        textView.resignFirstResponder()
+             return true
+         }
+    
+    @objc func endEditing() {
+        tvAddComment.resignFirstResponder()
+        }
     
     override func viewWillLayoutSubviews() {
         insertView.sizeToFit()
@@ -91,7 +128,7 @@ class CommentViewController: UIViewController {
     }
     */
 
-} // View
+} // ViewController
 
 extension CommentViewController: UITableViewDataSource, UITableViewDelegate{
     
@@ -177,9 +214,6 @@ extension CommentViewController : CommentInsertProtocol{
     }
 } // InsertProtocol
 
-extension CommentViewController{
-    
-}
 
 //extension UITextView{
 //    func setAddTextview(){
