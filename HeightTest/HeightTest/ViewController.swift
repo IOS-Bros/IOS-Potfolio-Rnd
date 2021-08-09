@@ -9,6 +9,7 @@ import UIKit
 
 class ViewController: UIViewController, UITextViewDelegate{
     
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var insertView: UIView!
     @IBOutlet weak var textView: UITextView!
 //    var keyHeight: CGFloat = 0.0
@@ -24,8 +25,8 @@ class ViewController: UIViewController, UITextViewDelegate{
 //        textView.text = "cofee Love cofee Love "
         // Do any additional setup after loading the view.
         // textView Design
-        textView.textContainer.maximumNumberOfLines = 3
-        textView.textContainer.lineBreakMode = .byTruncatingTail
+//        insertView.translatesAutoresizingMaskIntoConstraints = true
+//        textView.textContainer.lineBreakMode = .byTruncatingTail
         textView.layer.borderWidth = 0.7
         textView.layer.borderColor = UIColor.gray.cgColor
         textView.layer.cornerRadius = 20
@@ -35,11 +36,12 @@ class ViewController: UIViewController, UITextViewDelegate{
         textView.resignFirstResponder()
         textView.delegate = self
         textView.setTextView()
+        
+        insertView.setView()
        
         
         textView.delegate = self
         textView.returnKeyType = .done
-        
         
         // Solution 3
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -69,16 +71,19 @@ class ViewController: UIViewController, UITextViewDelegate{
     
     func textViewDidChange(_ textView: UITextView) {
         let maximumWidth: CGFloat = 271 // Change as appropriate for your use.
-        let maximunheight: CGFloat = 70
+        let maximunheight: CGFloat = 105
         let newSize = textView.sizeThatFits(CGSize(width: maximumWidth, height: .greatestFiniteMagnitude ))
         textView.frame.size = newSize
+        insertView.frame.size = newSize
         var newFrame = textView.frame
-        newFrame.size = CGSize(width: max(newSize.width, maximumWidth), height: max(maximunheight, newSize.height))
+        newFrame.size = CGSize(width: max(newSize.width, maximumWidth), height: newSize.height)
               textView.frame = newFrame
+        insertView.frame = newFrame
 //        let newSizeFit = textView.sizeThatFits(CGSize(width: fixedWidth, height: fixedHeight))
 //        textView.frame.size = newSizeFit
 //        let newSize = textView.sizeThatFits(CGSize(width: 271, height: .greatestFiniteMagnitude))
-        
+//        insertView.frame.size = newSize
+//        insertView.frame = newFrame
     }
     
 } // ViewController
@@ -88,7 +93,21 @@ class ViewController: UIViewController, UITextViewDelegate{
 extension UITextView{
     func setTextView(){
         self.translatesAutoresizingMaskIntoConstraints = true
+//        self.isScrollEnabled = true
     }
+}
+extension UIView {
+    func setView(){
+        let newView = UIView()
+        self.addSubview(newView)
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.sizeToFit()
+        
+    }
+    
+
+    
+    
 }
 //
 //

@@ -16,14 +16,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="7aV-Ku-Mrz">
-                                <rect key="frame" x="0.0" y="88" width="414" height="774"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HVZ-Xy-qxY">
+                                <rect key="frame" x="0.0" y="88" width="414" height="1000"/>
                                 <subviews>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vvs-XM-eTP">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="717"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="717" id="NGf-8A-VWx"/>
+                                            <constraint firstAttribute="height" constant="717" id="17J-iW-Zk0"/>
                                         </constraints>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="myCell" rowHeight="110" id="vFV-e5-pLb" customClass="CommentTableViewCell" customModule="Rnd02" customModuleProvider="target">
@@ -82,25 +82,21 @@
                                         </prototypes>
                                     </tableView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tRz-7m-Own">
-                                        <rect key="frame" x="0.0" y="717" width="414" height="57"/>
+                                        <rect key="frame" x="0.0" y="725" width="414" height="63"/>
                                         <subviews>
                                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="cComment" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="d0V-KL-Hob">
-                                                <rect key="frame" x="19" y="8" width="318" height="41"/>
+                                                <rect key="frame" x="24" y="11" width="318" height="41"/>
                                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="41" id="ijq-Uf-mZT"/>
-                                                    <constraint firstAttribute="width" constant="318" id="sv8-r7-MgT"/>
+                                                    <constraint firstAttribute="width" constant="318" id="osW-vp-lGr"/>
+                                                    <constraint firstAttribute="height" constant="41" id="q0Q-Gk-AwZ"/>
                                                 </constraints>
                                                 <color key="textColor" systemColor="labelColor"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                             </textView>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="07m-qD-7KA">
-                                                <rect key="frame" x="350" y="13" width="30" height="30"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="30" id="6Aj-xE-h0I"/>
-                                                    <constraint firstAttribute="height" constant="30" id="7Ni-78-CL5"/>
-                                                </constraints>
+                                                <rect key="frame" x="360" y="16.5" width="30" height="30"/>
                                                 <state key="normal" title="게시"/>
                                                 <connections>
                                                     <action selector="btnAddComment:" destination="omS-En-fFT" eventType="touchUpInside" id="dwf-AG-s7m"/>
@@ -109,35 +105,39 @@
                                         </subviews>
                                         <color key="backgroundColor" systemColor="systemOrangeColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="bottom" secondItem="d0V-KL-Hob" secondAttribute="bottom" constant="8" id="3Si-VK-VbT"/>
-                                            <constraint firstItem="07m-qD-7KA" firstAttribute="leading" secondItem="d0V-KL-Hob" secondAttribute="trailing" constant="13" id="bVS-uA-Esk"/>
-                                            <constraint firstAttribute="bottom" secondItem="07m-qD-7KA" secondAttribute="bottom" constant="14" id="d57-Jf-o9N"/>
-                                            <constraint firstAttribute="trailing" secondItem="07m-qD-7KA" secondAttribute="trailing" constant="34" id="eQ1-gD-z8F"/>
-                                            <constraint firstItem="d0V-KL-Hob" firstAttribute="leading" secondItem="tRz-7m-Own" secondAttribute="leading" constant="19" id="u46-1a-rxs"/>
-                                            <constraint firstAttribute="height" constant="57" id="vqf-Gu-ZNc"/>
+                                            <constraint firstAttribute="trailing" secondItem="07m-qD-7KA" secondAttribute="trailing" constant="24" id="IAL-9g-g8O"/>
+                                            <constraint firstItem="d0V-KL-Hob" firstAttribute="top" secondItem="tRz-7m-Own" secondAttribute="top" constant="11" id="Ite-5d-DOb"/>
+                                            <constraint firstItem="07m-qD-7KA" firstAttribute="leading" secondItem="tRz-7m-Own" secondAttribute="leading" constant="360" id="alo-AO-zvV"/>
+                                            <constraint firstItem="d0V-KL-Hob" firstAttribute="leading" secondItem="tRz-7m-Own" secondAttribute="leading" constant="24" id="e4I-co-s0c"/>
+                                            <constraint firstAttribute="bottom" secondItem="07m-qD-7KA" secondAttribute="bottom" constant="16.5" id="ier-kd-mLI"/>
+                                            <constraint firstAttribute="bottom" secondItem="d0V-KL-Hob" secondAttribute="bottom" constant="11" id="mH0-RA-jWG"/>
                                         </constraints>
                                     </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstAttribute="bottom" secondItem="tRz-7m-Own" secondAttribute="bottom" id="HXC-Gu-SZS"/>
-                                    <constraint firstItem="tRz-7m-Own" firstAttribute="leading" secondItem="7aV-Ku-Mrz" secondAttribute="leading" id="wFi-YI-NOV"/>
-                                    <constraint firstAttribute="trailing" secondItem="tRz-7m-Own" secondAttribute="trailing" id="z8y-VY-UoE"/>
+                                    <constraint firstItem="vvs-XM-eTP" firstAttribute="top" secondItem="HVZ-Xy-qxY" secondAttribute="top" id="0n1-e8-4BC" userLabel="Tb Comment.top = top + 150"/>
+                                    <constraint firstItem="vvs-XM-eTP" firstAttribute="width" secondItem="HVZ-Xy-qxY" secondAttribute="width" id="4Cb-eM-yWq"/>
+                                    <constraint firstItem="tRz-7m-Own" firstAttribute="width" secondItem="HVZ-Xy-qxY" secondAttribute="width" id="NvH-0E-d3X"/>
+                                    <constraint firstItem="vvs-XM-eTP" firstAttribute="leading" secondItem="HVZ-Xy-qxY" secondAttribute="leading" id="Vmz-Qi-ucf"/>
+                                    <constraint firstAttribute="bottom" secondItem="tRz-7m-Own" secondAttribute="bottom" constant="214" id="ndD-IS-MoZ"/>
+                                    <constraint firstItem="tRz-7m-Own" firstAttribute="leading" secondItem="vvs-XM-eTP" secondAttribute="leading" id="ny3-ny-NRw"/>
+                                    <constraint firstItem="tRz-7m-Own" firstAttribute="top" secondItem="vvs-XM-eTP" secondAttribute="bottom" constant="8" symbolic="YES" id="pYT-vP-nW3"/>
+                                    <constraint firstAttribute="trailing" secondItem="vvs-XM-eTP" secondAttribute="trailing" id="tA2-r3-CSV"/>
                                 </constraints>
-                            </stackView>
+                            </scrollView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="4aJ-x4-bwO"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="7aV-Ku-Mrz" firstAttribute="trailing" secondItem="4aJ-x4-bwO" secondAttribute="trailing" id="F6a-tn-rLo"/>
-                            <constraint firstItem="7aV-Ku-Mrz" firstAttribute="leading" secondItem="4aJ-x4-bwO" secondAttribute="leading" id="dJN-iA-Oh7"/>
-                            <constraint firstItem="7aV-Ku-Mrz" firstAttribute="bottom" secondItem="4aJ-x4-bwO" secondAttribute="bottom" id="e9g-SE-pPS"/>
-                            <constraint firstItem="7aV-Ku-Mrz" firstAttribute="top" secondItem="4aJ-x4-bwO" secondAttribute="top" id="jtM-hb-K8N"/>
+                            <constraint firstAttribute="trailing" secondItem="HVZ-Xy-qxY" secondAttribute="trailing" id="25r-zz-NWc"/>
+                            <constraint firstAttribute="bottom" secondItem="HVZ-Xy-qxY" secondAttribute="bottom" constant="-192" id="8g4-2j-b80"/>
+                            <constraint firstItem="HVZ-Xy-qxY" firstAttribute="top" secondItem="4aJ-x4-bwO" secondAttribute="top" id="PoJ-lO-oru"/>
+                            <constraint firstItem="HVZ-Xy-qxY" firstAttribute="leading" secondItem="tb6-uq-PQp" secondAttribute="leading" id="ue3-v9-Uir"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Comment" id="a5U-KL-dhm"/>
                     <connections>
                         <outlet property="insertView" destination="tRz-7m-Own" id="Wq8-1u-tUU"/>
-                        <outlet property="stackView" destination="7aV-Ku-Mrz" id="BV7-ng-sPC"/>
                         <outlet property="tbComment" destination="vvs-XM-eTP" id="yRh-Pu-AYr"/>
                         <outlet property="tvAddComment" destination="d0V-KL-Hob" id="d7N-J0-PHs"/>
                     </connections>
@@ -145,21 +145,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4jZ-Y6-tcC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="957.97101449275374" y="80.357142857142847"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="2eh-N1-Bhr">
-            <objects>
-                <viewController id="73o-y6-LtN" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="v4G-5U-vVx">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="WTg-0h-mwb"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="veM-US-z1j" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="958" y="852"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="ujF-JM-fwA">
