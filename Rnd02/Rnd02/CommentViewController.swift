@@ -16,7 +16,7 @@ class CommentViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var tbComment: UITableView!
     @IBOutlet weak var tvAddComment: UITextView!
     @IBOutlet weak var insertView: UIView!
-    @IBOutlet weak var stackView: UIStackView!
+
 
         
         
@@ -30,18 +30,29 @@ class CommentViewController: UIViewController, UITextViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         let commentSelectModel = CommentSelectModel()
         commentSelectModel.delegate = self
         commentSelectModel.getComment(fNo: fNo)
         print(commentArray.count)
         
-//        tvAddComment.translatesAutoresizingMaskIntoConstraints = true
-//        insertView.sizeToFit()
+        // textViewDesign
+        tvAddComment.layer.borderWidth = 0.7
+        tvAddComment.layer.borderColor = UIColor.gray.cgColor
+        tvAddComment.layer.cornerRadius = 20
+        tvAddComment.textContainerInset = UIEdgeInsets(top: 10,left: 10,bottom: 10,right: 10)
+        
+        // textView Delegate >> Dynamic Height
+        tvAddComment.resignFirstResponder()
         tvAddComment.delegate = self
+        tvAddComment.setTextView()
+//        tvAddComment.returnKeyType = .done
         
-        tvAddComment.text = " j"
+        // Dynamic Heigh of UIVIew
+        insertView.setView()
+        insertView.resignFirstResponder()
         
-        
+        // tableViwe Delegate
         tbComment.delegate = self
         tbComment.dataSource = self
         tbComment.rowHeight = UITableView.automaticDimension
@@ -49,50 +60,14 @@ class CommentViewController: UIViewController, UITextViewDelegate {
         tbComment.separatorStyle = .none
         
         
-        //
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        // Solution 3
+        NotificationCenter.default.addObserver(self, selector: #selector(CommentViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        
+        
+        // call the 'keyboardWillHide' function when the view controlelr receive notification that keyboard is going to be hidden
+          NotificationCenter.default.addObserver(self, selector: #selector(CommentViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
     } //ViewDidLoad
-    
-    func textFieldDidBeginEditing(_ textView: UITextView) {
-            fCurTextfieldBottom = textView.frame.origin.y + textView.frame.height
-        }
-
-    @objc func keyboardWillShow(notification: NSNotification) {
-            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-                if fCurTextfieldBottom <= self.view.frame.height - keyboardSize.height {
-                    return
-                }
-                if self.view.frame.origin.y == 0 {
-                    self.view.frame.origin.y -= keyboardSize.height
-                }
-            }
-        }
-    
-    
-    @objc func keyboardWillHide(notification: NSNotification) {
-           if self.view.frame.origin.y != 0 {
-               self.view.frame.origin.y = 0
-           }
-       }
-    
-    func textFieldShouldReturn(_ textView: UITextView) -> Bool {
-        textView.resignFirstResponder()
-             return true
-         }
-    
-    @objc func endEditing() {
-        tvAddComment.resignFirstResponder()
-        }
-    
-    override func viewWillLayoutSubviews() {
-        insertView.sizeToFit()
-        insertView.layoutIfNeeded()
-        tbComment.sizeToFit()
-        tbComment.layoutIfNeeded()
-    }
-    
     
     override func viewWillAppear(_ animated: Bool) {
 
@@ -100,6 +75,34 @@ class CommentViewController: UIViewController, UITextViewDelegate {
         commentSelectModel.delegate = self
         commentSelectModel.getComment(fNo: fNo)
         print("Data Reload")
+    }
+    
+    // NotificationCenter Selector func ***************
+    @objc func keyboardWillShow(notification: NSNotification) {
+        guard let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue else {
+           // if keyboard size is not available for some reason, dont do anything
+           return
+        }
+        // move the root view up by the distance of keyboard height
+          self.view.frame.origin.y = 0 - keyboardSize.height
+        
+        }
+      
+    @objc func keyboardWillHide(notification: NSNotification) {
+      // move back the root view origin to zero
+      self.view.frame.origin.y = 0
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        let maximumWidth: CGFloat = 271 // Change as appropriate for your use.
+//        let maximunheight: CGFloat = 105
+        let newSize = textView.sizeThatFits(CGSize(width: maximumWidth, height: .greatestFiniteMagnitude ))
+        textView.frame.size = newSize
+        insertView.frame.size = newSize
+        var newFrame = textView.frame
+        newFrame.size = CGSize(width: max(newSize.width, maximumWidth), height: newSize.height)
+              textView.frame = newFrame
+        insertView.frame = newFrame
     }
     
     
@@ -200,6 +203,23 @@ extension CommentViewController: UITableViewDataSource, UITableViewDelegate{
     
 } // UITableViewDataSource / delegate
 
+extension UITextView{
+    func setTextView(){
+        self.translatesAutoresizingMaskIntoConstraints = true
+        self.isScrollEnabled = true
+    }
+}
+
+extension UIView{
+    func setView(){
+        let newView = UIView()
+        self.addSubview(newView)
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.sizeToFit()
+    }
+}
+
+
 extension CommentViewController : CommentSelectProtocol{
     func commentDownload(comment: NSArray) {
         commentArray = comment as! NSMutableArray
@@ -214,26 +234,3 @@ extension CommentViewController : CommentInsertProtocol{
     }
 } // InsertProtocol
 
-
-//extension UITextView{
-//    func setAddTextview(){
-//        self.translatesAutoresizingMaskIntoConstraints = true
-//        self.sizeToFit()
-//    }
-//}
-
-//extension CommentViewController : UITextViewDelegate {
-//    func updateTextViewHeight(_ cell: CommentTableViewCell, _ textView: UITextView) {
-//
-//        let size = textView.bounds.size
-//        let newSize = tvAddComment.sizeThatFits(CGSize(width: size.width, height: CGFloat.greatestFiniteMagnitude))
-//        print(newSize)
-//
-//        if size.height != newSize.height {
-//        UIView.setAnimationsEnabled(false)
-//            tbComment.beginUpdates()
-//            tbComment.endUpdates()
-//            UIView.setAnimationsEnabled(true)
-//        }
-//    }
-//}
