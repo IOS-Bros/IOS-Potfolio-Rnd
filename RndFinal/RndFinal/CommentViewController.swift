@@ -1,8 +1,8 @@
 //
 //  CommentViewController.swift
-//  Rnd02
+//  RndFinal
 //
-//  Created by SooHoon on 2021/08/05.
+//  Created by SooHoon on 2021/08/11.
 //
 
 import UIKit
@@ -16,34 +16,19 @@ class CommentViewController: UIViewController, UITextViewDelegate {
     @IBOutlet weak var tbComment: UITableView!
     @IBOutlet weak var tvAddComment: UITextView!
     @IBOutlet weak var insertView: UIView!
-
-        
+    
     var cNo = 0
     var cSubmitDate = ""
     var cWriter = "DDD"
     var cContent = ""
-
-    var fCurTextfieldBottom: CGFloat = 0.0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
         let commentSelectModel = CommentSelectModel()
         commentSelectModel.delegate = self
         commentSelectModel.getComment(fNo: fNo)
-        print(commentArray.count)
-        
-//        let frameSize = view.bounds.size
-//        scrollView = UIScrollView(frame: CGRect(origin: CGPoint.zero, size: frameSize))
-//        // 이미지는 번들에 포함되어 있음을 가정한다.
-//        
-////        let subView1 = scrollView.contentSize = tbComment.bounds.size
-////        let subView2 = scrollView.contentSize = insertView.bounds.size
-//        scrollView?.addSubview(tbComment!)
-//        scrollView?.addSubview(insertView!)
-//        view.addSubview()
-        
+        print("Data Reload")
         
         // textViewDesign
         tvAddComment.layer.borderWidth = 0.7
@@ -54,7 +39,7 @@ class CommentViewController: UIViewController, UITextViewDelegate {
         // textView Delegate >> Dynamic Height
         tvAddComment.resignFirstResponder()
         tvAddComment.delegate = self
-        tvAddComment.setTextView()
+        tvAddComment.setInsertTextView()
 //        tvAddComment.returnKeyType = .done
         
         // Dynamic Heigh of UIVIew
@@ -68,6 +53,11 @@ class CommentViewController: UIViewController, UITextViewDelegate {
         tbComment.estimatedRowHeight = 500
         tbComment.separatorStyle = .none
         
+        tbComment.remembersLastFocusedIndexPath = true
+        
+        tvAddComment.isUserInteractionEnabled = false
+        
+        delayTime()
         
         // Solution 3
         NotificationCenter.default.addObserver(self, selector: #selector(CommentViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -76,14 +66,25 @@ class CommentViewController: UIViewController, UITextViewDelegate {
         // call the 'keyboardWillHide' function when the view controlelr receive notification that keyboard is going to be hidden
           NotificationCenter.default.addObserver(self, selector: #selector(CommentViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-    } //ViewDidLoad
+        
+    } // ViewDidLoad
+
     
     override func viewWillAppear(_ animated: Bool) {
 
-        let commentSelectModel = CommentSelectModel()
-        commentSelectModel.delegate = self
-        commentSelectModel.getComment(fNo: fNo)
-        print("Data Reload")
+//        let commentSelectModel = CommentSelectModel()
+//        commentSelectModel.delegate = self
+//        commentSelectModel.getComment(fNo: fNo)
+//        print("Data Reload")
+    }
+    
+    func delayTime(){
+        let time = DispatchTime.now() + .seconds(2)
+        DispatchQueue.main.asyncAfter(deadline: time, execute: delayTextview)
+    }
+    
+    func delayTextview(){
+        tvAddComment.isUserInteractionEnabled = true
     }
     
     // NotificationCenter Selector func ***************
@@ -92,8 +93,13 @@ class CommentViewController: UIViewController, UITextViewDelegate {
            // if keyboard size is not available for some reason, dont do anything
            return
         }
+        if let newFrame = (notification.userInfo?[ UIResponder.keyboardFrameEndUserInfoKey ] as? NSValue)?.cgRectValue {
+            let insets = UIEdgeInsets( top: newFrame.height, left: 0, bottom: 0, right: 0 )
+                    tbComment.scrollIndicatorInsets = insets
+                    tbComment.contentInset = insets
+                }
         // move the root view up by the distance of keyboard height
-          self.view.frame.origin.y = 0 - keyboardSize.height
+          self.view.frame.origin.y = 60 - keyboardSize.height
 //        tbComment.frame.origin.y = 0 - keyboardSize.height
         
         }
@@ -101,23 +107,24 @@ class CommentViewController: UIViewController, UITextViewDelegate {
     @objc func keyboardWillHide(notification: NSNotification) {
       // move back the root view origin to zero
       self.view.frame.origin.y = 0
+    
     }
     
     func textViewDidChange(_ textView: UITextView) {
         
         if tvAddComment.frame.size.height < 70{
 
-        let maximumWidth: CGFloat = 271 // Change as appropriate for your use.
+        let maximumWidth: CGFloat = 331 // Change as appropriate for your use.
         let maximunheight: CGFloat = 105
         let newSize = textView.sizeThatFits(CGSize(width: maximumWidth, height: .greatestFiniteMagnitude ))
-        textView.frame.size = newSize
-        insertView.frame.size = newSize
+            
+                textView.frame.size = newSize
+                insertView.frame.size = newSize
         var newFrame = textView.frame
+            
             newFrame.size = CGSize(width: max(newSize.width, maximumWidth), height: newSize.height)
-              textView.frame = newFrame
-        insertView.frame = newFrame
-        
-        
+                textView.frame = newFrame
+                insertView.frame = newFrame
         } else {
             
         }
@@ -126,8 +133,6 @@ class CommentViewController: UIViewController, UITextViewDelegate {
     
     @IBAction func btnAddComment(_ sender: UIButton) {
         
-//        cWriter =
-        
         cContent = tvAddComment.text
         
         print(" count 1 : " , commentArray.count)
@@ -135,9 +140,10 @@ class CommentViewController: UIViewController, UITextViewDelegate {
         insertModel.delegate = self
         insertModel.insertGetComment(cWriter: cWriter, cContent: cContent, fNo: fNo)
         print("insert End")
-     
+        
+        tvAddComment.text = ""
+        
     }
-   
     
     /*
     // MARK: - Navigation
@@ -149,9 +155,13 @@ class CommentViewController: UIViewController, UITextViewDelegate {
     }
     */
 
-} // ViewController
+} // ViewCOntroller
 
-extension CommentViewController: UITableViewDataSource, UITableViewDelegate{
+    
+//============================================
+
+
+extension CommentViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -162,20 +172,20 @@ extension CommentViewController: UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath) as! CommentTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "commentCell", for: indexPath) as! CommentTableViewCell
         
+        print("#")
         cell.delegate = tbComment as? CommentTableViewCellDelegate
         
         let comment: DBModel = commentArray[indexPath.row] as! DBModel
         
-        cell.lblWriter.text = comment.cWriter
+        cell.lblCWriter.text = comment.cWriter
+        cell.tvComment.text = comment.cContent
         cell.imgProfile.image = UIImage(named: "flower_01.png")
-        cell.tvContent.text = comment.cContent
         
         return cell
     }
     
-    //삭제
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         
         let comment : DBModel = commentArray[indexPath.row] as! DBModel
@@ -211,19 +221,17 @@ extension CommentViewController: UITableViewDataSource, UITableViewDelegate{
             }else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
-        
-    } // delete row func
+    }
     
     func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
         return "삭제"
     }
     
-    
-    
-} // UITableViewDataSource / delegate
+} // UITableView extension
 
-extension UITextView{
-    func setTextView(){
+
+extension UITextView {
+    func setInsertTextView(){
         self.translatesAutoresizingMaskIntoConstraints = true
         self.isScrollEnabled = true
     }
@@ -238,19 +246,14 @@ extension UIView{
     }
 }
 
-//extension UIScrollView{
-//    func setScrollView(){
-//        let frameSize = self.bounds.size
-//        var scrollView = UIScrollView(frame: CGRect(origin: CGPoint.zero, size: frameSize)
-//        /// 이미지는 번들에 포함되어 있음을 가정한다.
-//
-//    }
-//}
+
 
 extension CommentViewController : CommentSelectProtocol{
     func commentDownload(comment: NSArray) {
         commentArray = comment as! NSMutableArray
         self.tbComment.reloadData()
+        
+//        tvAddComment.isUserInteractionEnabled = true
     }
 } // SelectProtocol
 

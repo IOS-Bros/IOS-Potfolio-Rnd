@@ -12,7 +12,10 @@ class ViewController: UIViewController, UITextViewDelegate{
     @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var insertView: UIView!
     @IBOutlet weak var textView: UITextView!
-//    var keyHeight: CGFloat = 0.0
+    @IBOutlet weak var tableView: UITableView!
+    //    var keyHeight: CGFloat = 0.0
+    
+var testArray: Array<String> = ["1", "2", "3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20\\n \n \n \n"]
 
     
     
@@ -27,6 +30,11 @@ class ViewController: UIViewController, UITextViewDelegate{
         // textView Design
 //        insertView.translatesAutoresizingMaskIntoConstraints = true
 //        textView.textContainer.lineBreakMode = .byTruncatingTail
+        tableView.delegate = self
+        tableView.dataSource = self
+//        tableView.estimatedRowHeight = 50
+//        tableView.rowHeight = UITableView.automaticDimension
+        
         textView.layer.borderWidth = 0.7
         textView.layer.borderColor = UIColor.gray.cgColor
         textView.layer.cornerRadius = 20
@@ -40,8 +48,10 @@ class ViewController: UIViewController, UITextViewDelegate{
         insertView.setView()
        
         
-        textView.delegate = self
+
         textView.returnKeyType = .done
+        
+        
         
         // Solution 3
         NotificationCenter.default.addObserver(self, selector: #selector(ViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
@@ -59,6 +69,11 @@ class ViewController: UIViewController, UITextViewDelegate{
            // if keyboard size is not available for some reason, dont do anything
            return
         }
+        if let newFrame = (notification.userInfo?[ UIResponder.keyboardFrameEndUserInfoKey ] as? NSValue)?.cgRectValue {
+            let insets = UIEdgeInsets( top: newFrame.height, left: 0, bottom: 0, right: 0 )
+                    tableView.contentInset = insets
+                    tableView.scrollIndicatorInsets = insets
+                }
         // move the root view up by the distance of keyboard height
           self.view.frame.origin.y = 0 - keyboardSize.height
         
@@ -93,8 +108,8 @@ class ViewController: UIViewController, UITextViewDelegate{
 extension UITextView{
     func setTextView(){
         self.translatesAutoresizingMaskIntoConstraints = true
-//        self.isScrollEnabled = true
-    }
+        self.isScrollEnabled = true
+}
 }
 extension UIView {
     func setView(){
@@ -103,10 +118,28 @@ extension UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.sizeToFit()
         
+    } 
+    
+}
+
+extension ViewController: UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return testArray.count
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "myCell", for: indexPath)
+        
+        cell.textLabel?.text = testArray[indexPath.row]
+        
+        return cell
     }
     
 
-    
     
 }
 //
